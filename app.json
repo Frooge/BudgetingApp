@@ -4,7 +4,7 @@
     "slug": "BudgetingApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./src/assets/images/icon.png",
     "scheme": "budgetingapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
