@@ -38,11 +38,18 @@
             "backgroundColor": "#000000"
           }
         }
-      ]
+      ],
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "fonts": [
+      {
+        "asset": "./assets/fonts/ClimateCrisis-Regular-VariableFont_YEAR.ttf",
+        "name": "climate-crisis"
+      }
+    ]
   }
 }

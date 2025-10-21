@@ -10,6 +10,7 @@
     "lint": "expo lint"
   },
   "dependencies": {
+    "@expo-google-fonts/climate-crisis": "^0.4.1",
     "@expo/vector-icons": "^15.0.2",
     "@freakycoder/react-native-helpers": "^2.5.1",
     "@react-navigation/bottom-tabs": "^7.4.0",
