@@ -1,20 +1,22 @@
+import Header from "@/components/Header";
 import { Text, View } from "react-native";
 
 export default function HomeScreen() {
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      {/* <View> 
+    <View>
+        <Header title="Home" />
+      {/* <View>
           <Text>Welcome back,</Text>
           <Text>Jade</Text>
       </View> */}
-      <View>
+      <View
+        style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+        }}
+      >
         <Text
         style={{
           fontFamily: 'ClimateCrisis_400Regular',
