@@ -29,7 +29,7 @@ export default function Header({
   };
 
   return (
-    <View className="flex-1">
+    <View>
       {/* Header Section */}
       <View
         className={`px-6 py-4 ${
@@ -49,7 +49,7 @@ export default function Header({
               </Pressable>
             )}
             <Text
-              className="flex-1 text-2xl font-bold text-yellow-200 tracking-wider"
+              className="flex-1 text-xl font-bold text-yellow-200 tracking-wider"
               style={{ fontFamily: 'ClimateCrisis_400Regular' }}
               numberOfLines={1}
             >

@@ -1,11 +1,13 @@
 import Header from "@/components/Header";
-import { Text, View } from "react-native";
+import { useRouter } from "expo-router";
+import { Text, TouchableOpacity, View } from "react-native";
 
 export default function HomeScreen() {
+  const router = useRouter();
 
   return (
     <View>
-        <Header title="Home" />
+        <Header title="Home" showBack={false}/>
       {/* <View>
           <Text>Welcome back,</Text>
           <Text>Jade</Text>
@@ -33,9 +35,12 @@ export default function HomeScreen() {
             </View>
             <Text>{'>'}</Text>
         </View>
-        {/* <View>
-          <Text>+</Text>
-        </View> */}
+        <TouchableOpacity
+          onPress={() => router.push("/(budget)/new-budget-plan")}
+          className="rounded-lg bg-blue-500 px-6 py-3"
+        >
+          <Text className="font-semibold text-white">Create New Budget Plan</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

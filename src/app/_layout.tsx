@@ -5,7 +5,16 @@ import "./global.css";
 export default function RootLayout() {
   return (
     <FontProvider>
-      <Stack />
+      <Stack>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="(budget)"
+          options={{
+            presentation: "modal",
+            headerShown: false,
+          }}
+        />
+      </Stack>
     </FontProvider>
   );
 }
