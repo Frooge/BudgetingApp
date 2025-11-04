@@ -1,15 +1,20 @@
-import { Header } from "@/components";
+import { FixedButton, Header } from "@/components";
+import { useBudgetPlanStore } from "@/stores/budgetPlanStore";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 export default function NewBudgetPlanScreen() {
   const router = useRouter();
+  const addBudgetPlan = useBudgetPlanStore((state) => state.addBudgetPlan);
   const [title, setTitle] = useState("");
   const [selectedAccount, setSelectedAccount] = useState<string | null>(null);
-  const [startDate, setStartDate] = useState("March 1, 2025");
-  const [endDate, setEndDate] = useState("April 15, 2025");
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState<Date | null>(null);
+  const [showStartDatePicker, setShowStartDatePicker] = useState(false);
+  const [showEndDatePicker, setShowEndDatePicker] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState<{ [key: string]: boolean }>({
     Shopping: false,
     Food: false,
@@ -44,10 +49,61 @@ export default function NewBudgetPlanScreen() {
     }));
   };
 
+  const formatDate = (date: Date | null) => {
+    if (!date) return "";
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
+  const handleStartDateChange = (event: any, selectedDate?: Date) => {
+    setShowStartDatePicker(Platform.OS === "ios");
+    if (selectedDate) {
+      setStartDate(selectedDate);
+    }
+  };
+
+  const handleEndDateChange = (event: any, selectedDate?: Date) => {
+    setShowEndDatePicker(Platform.OS === "ios");
+    if (selectedDate) {
+      setEndDate(selectedDate);
+    }
+  };
+
+  const handleSaveBudgetPlan = () => {
+    if (!title.trim()) {
+      alert("Please enter a budget plan title");
+      return;
+    }
+
+    const categoriesData = categories.reduce(
+      (acc, category) => ({
+        ...acc,
+        [category]: {
+          selected: selectedCategories[category],
+          amount: categoryAmounts[category],
+        },
+      }),
+      {}
+    );
+
+    addBudgetPlan({
+      title,
+      startDate: formatDate(startDate),
+      endDate: formatDate(endDate),
+      selectedAccount,
+      categories: categoriesData,
+    });
+
+    router.back();
+  };
+
   return (
-    <View>
+    <View className="flex-1">
       <Header title="New Budget Plan" showBack />
-      <ScrollView className="flex-1 bg-slate-100 p-4">
+      <ScrollView className="flex-1 bg-slate-100 p-4 pb-24">
         {/* Title Field */}
         <View className="mb-6">
           <Text className="mb-2 text-sm font-semibold text-gray-700">Title</Text>
@@ -62,30 +118,52 @@ export default function NewBudgetPlanScreen() {
         {/* Time Period */}
         <View className="mb-6">
           <Text className="mb-3 text-sm font-semibold text-gray-700">Time Period</Text>
-          <View className="flex-row items-center justify-between rounded-lg bg-white p-3">
-            <TextInput
-              className="flex-1"
-              placeholder="Start date"
-              value={startDate}
-              onChangeText={setStartDate}
-            />
+          <View className="flex-row items-center justify-between">
+            <TouchableOpacity
+              className="flex-1 rounded-lg border border-gray-300 bg-white px-3 py-2"
+              onPress={() => setShowStartDatePicker(true)}
+            >
+              <Text className={startDate ? "text-gray-800" : "text-gray-400"}>
+                {formatDate(startDate) || "Start date"}
+              </Text>
+            </TouchableOpacity>
             <Text className="mx-2 text-gray-600">to</Text>
-            <TextInput
-              className="flex-1"
-              placeholder="End date"
-              value={endDate}
-              onChangeText={setEndDate}
-            />
+            <TouchableOpacity
+              className="flex-1 rounded-lg border border-gray-300 bg-white px-3 py-2"
+              onPress={() => setShowEndDatePicker(true)}
+            >
+              <Text className={endDate ? "text-gray-800" : "text-gray-400"}>
+                {formatDate(endDate) || "End date"}
+              </Text>
+            </TouchableOpacity>
           </View>
+
+          {/* Date Pickers */}
+          {showStartDatePicker && (
+            <DateTimePicker
+              value={startDate}
+              mode="date"
+              display={Platform.OS === "ios" ? "spinner" : "default"}
+              onChange={handleStartDateChange}
+            />
+          )}
+          {showEndDatePicker && (
+            <DateTimePicker
+              value={endDate || new Date()}
+              mode="date"
+              display={Platform.OS === "ios" ? "spinner" : "default"}
+              onChange={handleEndDateChange}
+            />
+          )}
         </View>
 
         {/* Categories */}
         <View className="mb-6">
           <Text className="mb-3 text-sm font-semibold text-gray-700">Categories</Text>
-          <View className="rounded-lg bg-white p-4">
+          <View className="p-4">
             {categories.map((category) => (
               <View key={category} className="mb-4">
-                <View className="mb-2 flex-row items-center">
+                <View className="flex-row items-center">
                   <TouchableOpacity onPress={() => handleCategoryToggle(category)}>
                     <MaterialIcons
                       name={selectedCategories[category] ? "check-box" : "check-box-outline-blank"}
@@ -109,13 +187,14 @@ export default function NewBudgetPlanScreen() {
                 )}
               </View>
             ))}
-            <TouchableOpacity className="mt-4 flex-row items-center pt-2">
+            <TouchableOpacity className="flex-row items-center">
               <Text className="text-lg text-blue-500">+</Text>
               <Text className="ml-2 text-blue-500">New Category</Text>
             </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
+      <FixedButton onPress={handleSaveBudgetPlan}>Save</FixedButton>
     </View>
   );
 }
