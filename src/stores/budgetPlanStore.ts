@@ -1,8 +1,12 @@
+import { fetchMockBudgetPlans } from '@/app/services/budgetPlanMock';
 import { BudgetPlan } from '@/types/budgetPlan';
 import { create } from 'zustand';
 
 interface BudgetPlanStore {
     budgetPlans: BudgetPlan[];
+    isLoading: boolean;
+    error: string | null;
+    fetchBudgetPlans: () => Promise<void>;
     addBudgetPlan: (plan: Omit<BudgetPlan, 'id' | 'createdAt' | 'updatedAt'>) => void;
     updateBudgetPlan: (id: string, plan: Partial<BudgetPlan>) => void;
     deleteBudgetPlan: (id: string) => void;
@@ -12,6 +16,21 @@ interface BudgetPlanStore {
 
 export const useBudgetPlanStore = create<BudgetPlanStore>((set, get) => ({
     budgetPlans: [],
+    isLoading: false,
+    error: null,
+
+    fetchBudgetPlans: async () => {
+        set({ isLoading: true, error: null });
+        try {
+            const plans = await fetchMockBudgetPlans();
+            set({ budgetPlans: plans, isLoading: false });
+        } catch (error) {
+            set({
+                error: error instanceof Error ? error.message : 'Failed to fetch budget plans',
+                isLoading: false
+            });
+        }
+    },
 
     addBudgetPlan: (plan) =>
         set((state) => ({
@@ -43,4 +62,4 @@ export const useBudgetPlanStore = create<BudgetPlanStore>((set, get) => ({
     getBudgetPlan: (id) => get().budgetPlans.find((plan) => plan.id === id),
 
     getBudgetPlans: () => get().budgetPlans,
-}));
+}));;

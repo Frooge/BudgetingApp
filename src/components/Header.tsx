@@ -8,6 +8,7 @@ interface HeaderProps {
   children?: ReactNode;
   inverted?: boolean;
   showBack?: boolean;
+  className?: string;
 }
 
 export default function Header({
@@ -15,6 +16,7 @@ export default function Header({
   children,
   inverted = false,
   showBack = true,
+  className,
 }: HeaderProps) {
   const router = useRouter();
   const navigation = useNavigation();
@@ -29,12 +31,11 @@ export default function Header({
   };
 
   return (
-    <View>
+    <View className={className}>
       {/* Header Section */}
       <View
-        className={`px-6 py-4 ${
-          inverted ? "bg-blue-300 pt-8 pb-18" : "rounded-b-3xl py-8 bg-blue-300"
-        }`}
+        className={`px-6 ${inverted ? "bg-blue-300 pt-8 pb-14" : "rounded-b-3xl py-8 bg-blue-300"
+          }`}
       >
         {/* Back button and title row */}
         <View className="flex-row items-center justify-between">
