@@ -11,10 +11,8 @@ export default function TabLayout() {
 
   useFocusEffect(
     useCallback(() => {
-      // Show FAB when tab layout is focused
       setFABVisible(true);
       return () => {
-        // Hide FAB when navigating away
         setFABVisible(false);
       };
     }, [setFABVisible])

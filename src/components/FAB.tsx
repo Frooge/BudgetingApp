@@ -1,17 +1,19 @@
 import { useFABStore } from '@/stores/fabStore';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from "expo-router";
 import { Pressable, View } from 'react-native';
+
 
 export default function FAB() {
   const isVisible = useFABStore((state) => state.isVisible);
+  const router = useRouter();
 
   if (!isVisible) {
     return null;
   }
 
   const handlePress = () => {
-    // Handle FAB press - add your logic here
-    console.log('FAB pressed');
+    router.push("/(transaction)/new-transaction")
   };
 
   return (

@@ -9,7 +9,7 @@ interface FixedButtonProps {
 
 export default function FixedButton({ onPress, children, testID }: FixedButtonProps) {
     return (
-        <TouchableOpacity onPress={onPress} className="bg-blue-500 px-4 py-3" testID={testID}>
+        <TouchableOpacity onPress={onPress} className="bg-blue-400 px-4 py-3" testID={testID}>
             <Text className="text-center font-semibold text-white">{children}</Text>
         </TouchableOpacity>
     );
